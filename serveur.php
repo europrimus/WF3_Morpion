@@ -6,6 +6,19 @@ https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API/Writing_WebSocke
 
 depot github:
 https://github.com/europrimus/WF3_Morpion
+
+Faire des objets !!
+partie
+  grille
+  nomJ1
+  nomJ2
+  etat
+    1 : au joueur 1 de jouer
+    2 : au joueur 2 de jouer
+    10 : partie terminé
+    11 : manque nom joueur 1
+    12 : manque nom joueur 2
+  message
 */
 
 // initialisation de la session
