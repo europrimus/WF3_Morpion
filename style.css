@@ -1,0 +1,29 @@
+/* le tableau de jeu */
+table{
+  border-collapse: collapse;
+}
+td{
+  width: 5rem;
+  border: 1px black solid;
+}
+
+tr{
+  height: 5rem;
+}
+
+/* le message*/
+#message{
+  border: 1px black solid;
+  border-radius: 5px;
+  padding: 1px 10px;
+  margin: 5px;
+}
+
+/* gestion des états */
+.cacher{
+  display: none;
+}
+
+.cliquable{
+  cursor: pointer;
+}

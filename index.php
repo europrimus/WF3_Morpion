@@ -31,16 +31,38 @@ Exercice Ajax/POO : morpion
 	</header>
 
 	<main>
-    <section>
 
+<!-- Section avec le tableau de jeu -->
+    <section class="cacher" id="plateau">
+			<h1><span id="nomJ1"></span> contre <span id="nomJ2"></span></h1>
+<table>
+	<tr><td class="cliquable"></td><td class="cliquable"></td><td class="cliquable"></td></tr>
+	<tr><td class="cliquable"></td><td class="cliquable"></td><td class="cliquable"></td></tr>
+	<tr><td class="cliquable"></td><td class="cliquable"></td><td class="cliquable"></td></tr>
+</table>
     </section>
+
+<!-- Section avec enregistrement joueurs -->
+<section id="creationJoueur">
+	<form>
+		<label for="nom" >Entrez votre nom :</label>
+		<input type="text" name="nom" id="nom">
+		<input type="submit" name="submit">
+	</form>
+</section>
+
+<!-- Section avec le message -->
+<section id="message">
+	<p></p>
+</section>
 	</main>
 
 	<footer>
+		<p>page réalisé par Dider et Geofrey</p>
 	</footer>
 
+	<!-- Les script JavaScript -->
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script src="morpion.js"></script>
 </body>
-
-<!-- Les script JavaScript -->
-
 </html>
