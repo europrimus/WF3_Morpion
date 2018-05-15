@@ -17,7 +17,7 @@ partie
     2 : au joueur 2 de jouer
     10 : partie terminé
     11 : manque nom joueur 1
-    12 : manque nom joueur 2
+    12 : manque nom joueur 2slac
   message
 */
 
