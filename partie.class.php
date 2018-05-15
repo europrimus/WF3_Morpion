@@ -12,9 +12,32 @@ class partie{
     12 : manque nom joueur 2
 */
   private $_message; // chaine de carractère
+  private const TAILLE=[3,3]; // la taille du plateau [Ligne,Colone]
 
   // les fonctions privés
-
+  public function _gagne(){
+    // on regarde qui a gagner
+    // renvois le num du joueur ou False
+    //les lignes
+    foreach ($this->_grille as $key => $ligne) {
+      //echo " ligne:<pre>";var_dump( $ligne );echo "</pre>";
+      $val = array_count_values($ligne);
+      //echo " val:<pre>";var_dump( $val );echo "</pre>";
+      if( isset($val[1]) ){
+        if($val[1] == $this::TAILLE[0] ){
+          //le joueur 1 à gangé
+          $this->_etat = 10;
+          $this->_message = "C'est $this->_nomJ1 qui à gagné.";
+        };
+      };
+      if( isset($val[2]) ){
+        if($val[2] == $this::TAILLE[0] ) {
+        $this->_etat = 10;
+        $this->_message = "C'est $this->_nomJ2 qui à gagné.";
+        };
+      };
+    };
+  }
 
   // les fonctions public
 // fonction appellé à la création de l'objet
@@ -44,6 +67,11 @@ class partie{
     $case=str_split( $case , 1);
     // vérifier si on a un chiffre entre 0 et 3
     // vérifier que l'on ne joue pas 2 foi la même case
+    if( isset($this->_grille[ $case[0] ][ $case[1] ]) ){
+      $this->_message = "Case déjà joué. C'est toujours à $joueur de jouer.";
+      return False;
+    };
+
     $this->_grille[ $case[0] ][ $case[1] ]=$joueur;
     if($this->_etat == 1){
       $this->_etat = 2;
@@ -53,8 +81,10 @@ class partie{
       $this->_etat = 1;
       $this->_message = "C'est à $this->_nomJ1 de jouer.";
     };
+    //$this->_gagne();
     return True;
   }
+
 
   public function getGrille(){
     // retourne la grille de jeu
@@ -99,7 +129,7 @@ class partie{
       // défini le nom du joueur 2
       $this->_nomJ2 = $nom;
       $this->_etat = 1;
-      $this->_message = "Bienvenu $this->_nomJ2. C'est à $this->_nomJ1 de jouer.";
+      $this->_message = "Bienvenu à $this->_nomJ2. C'est à $this->_nomJ1 de jouer.";
       setcookie("monNom",$nom,time()+100);
       setcookie("monNum",2,time()+100);
     };

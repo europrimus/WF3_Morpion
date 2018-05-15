@@ -49,6 +49,8 @@ if( isset($_REQUEST["case"]) ){
 // renvois info à J1
 // toute la grille
 
+$partieObj->_gagne();
+
 // ecrit les infos dans le fichier de la partie
 $fichier = fopen ( $fichierPartie , "w" );
 fwrite ( $fichier , $partieObj->getJson() );

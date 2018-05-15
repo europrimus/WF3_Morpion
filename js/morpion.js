@@ -1,6 +1,6 @@
 // nom de la partie:
 let partie = "partieObj.json"
-
+let idInterval;
 // on charge la partie
 jQuery.post( partie, draw, 'json');
 
@@ -17,7 +17,7 @@ jQuery("#submitNom").click( function( event ) {
 });
 
 // on click sur une case
-jQuery("#plateau .cliquable").click( function( event ) {
+function clickJoue( event ) {
 	console.warn("click sur #plateau .cliquable");
 // on récupère la case
 	let ligne = jQuery(this)[0].cellIndex;
@@ -25,12 +25,11 @@ jQuery("#plateau .cliquable").click( function( event ) {
 	let box = String(colone)+String(ligne);
 	console.log(box);
 	jQuery.post("serveur.php", { "case": box }, draw, 'json');
-});
+	idInterval = setTimeout(function() {
+		jQuery.post( partie, draw, 'json');
+	}, 500);
+};
 
-// on recupère la partie en cour
-let idInterval = setInterval(function() {
-	jQuery.post( partie, draw, 'json');
-}, 5000);
 
 // on dessine le jeu
 function draw($data){
@@ -56,22 +55,33 @@ let jeSuis;
 if( $data.nomJ1 == localStorage.monNom ){jeSuis = 1}
 else if( $data.nomJ2 == localStorage.monNom ){jeSuis = 2}
 if($data.etat != jeSuis ){
-	jQuery("#plateau td").removeClass("cliquable");
-	jQuery("#plateau").off( "click", "#plateau td");
+	//console.log("ce n'est pas à moi de jouer");
+	jQuery("#plateau td").removeClass("cliquable").off( "mouseup" );
+	// on recupère la partie en cour
+	idInterval = setTimeout(function() {
+		jQuery.post( partie, draw, 'json');
+	}, 500);
+}else{
+	//console.log("c'est à moi de jouer");
+	// on arrete de récupérer les infos de partie
+	clearInterval(idInterval);
+	jQuery("#plateau td").addClass("cliquable");
+	jQuery("#plateau .cliquable").mouseup( clickJoue );
 }
 
 // on rempli le plateau
 //console.log($data.grille);
 //console.log(typeof $data.grille);
-console.log(jQuery("#plateau tr"));
+//console.log(jQuery("#plateau tr"));
 jQuery.each( $data.grille, function(y, ligne){
-	console.warn(y);
+	//console.warn(y);
 	//console.log(ligne);
 	jQuery.each( ligne, function(x, box){
-		console.log(x);
+		//console.log(x);
 		//console.log(box);
 		//console.log( jQuery("#plateau tr").eq(y).children("td").eq(x) );
 		jQuery("#plateau tr").eq(y).children("td").eq(x)[0].innerHTML='<img src="img/'+box+'.png">';
+		jQuery("#plateau tr").eq(y).children("td").eq(x).removeClass("cliquable").off( "mouseup" );
 		//jQuery("#plateau tr").eq(1).children()
 		//box;
 	});
