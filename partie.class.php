@@ -58,12 +58,12 @@ class partie{
 
   public function getGrille(){
     // retourne la grille de jeu
-    return $this->_grille;
+    return (array) $this->_grille;
   }
 
   public function getJson(){
     // retourne le json avec touts les infos de la partie
-    $json = ["nomJ1"=>$this->_nomJ1, "nomJ2"=>$this->_nomJ2, "etat"=>$this->_etat, "message"=>$this->_message, "grille"=>$this->_grille];
+    $json = ["nomJ1"=>$this->_nomJ1, "nomJ2"=>$this->_nomJ2, "etat"=>$this->_etat, "message"=>$this->_message, "grille"=>(array) $this->_grille];
     return json_encode($json);
   }
 
@@ -91,6 +91,8 @@ class partie{
       $this->_nomJ1 = $nom;
       $this->_etat = 12;
       $this->_message = "Bienvenu $this->_nomJ1. On attend un autre joueur.";
+      setcookie("monNom",$nom,time()+100);
+      setcookie("monNum",1,time()+100);
     }
 
     elseif($this->_etat == 12){
@@ -98,6 +100,8 @@ class partie{
       $this->_nomJ2 = $nom;
       $this->_etat = 1;
       $this->_message = "Bienvenu $this->_nomJ2. C'est à $this->_nomJ1 de jouer.";
+      setcookie("monNom",$nom,time()+100);
+      setcookie("monNum",2,time()+100);
     };
   }
 }

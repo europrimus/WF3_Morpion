@@ -3,12 +3,12 @@ table{
   border-collapse: collapse;
 }
 td{
-  width: 5rem;
+  width: 150px;
   border: 1px black solid;
 }
 
 tr{
-  height: 5rem;
+  height: 150px;
 }
 
 /* le message*/
