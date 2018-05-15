@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="fr" prefix="og: http://ogp.me/ns#">
 <!--
@@ -47,13 +50,13 @@ Exercice Ajax/POO : morpion
 	<form>
 		<label for="nom" >Entrez votre nom :</label>
 		<input type="text" name="nom" id="nom">
-		<input type="submit" name="submit">
+		<input type="submit" name="submit" id="submitNom">
 	</form>
 </section>
 
 <!-- Section avec le message -->
 <section id="message">
-	<p></p>
+	<p>Entrer votre nom pour commencer une partie.</p>
 </section>
 	</main>
 
