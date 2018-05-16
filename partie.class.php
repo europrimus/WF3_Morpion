@@ -17,7 +17,6 @@ class partie{
   // les fonctions privés
   private function _gagne(){
     // on regarde qui a gagner
-    // renvois le num du joueur ou False
 
     //les lignes
     foreach ($this->_grille as $key => $ligne) {
@@ -45,6 +44,12 @@ class partie{
     //echo " bg:<pre>";var_dump( $bg );echo "</pre>";
     $this->_nbCase($hg);
     $this->_nbCase($bg);
+
+//est ce que toute les cases ont été joué
+    if( array_sum( array_map("count", $this->_grille ) ) >= $this::TAILLE[0]*$this::TAILLE[1] ){
+      $this->_etat = 10;
+      $this->_message = "Toute les cases ont été joué. Entrer votre nom pour commencer une nouvelle partie.";
+    };
   }
 
 // verifie si x cases
@@ -67,7 +72,7 @@ class partie{
 // renvois la fin de la partie
   private function _finPartie($gagnant){
     $this->_etat = 10;
-    $this->_message = "C'est $gagnant qui à gagné.";
+    $this->_message = "C'est $gagnant qui à gagné. Entrer votre nom pour commencer une nouvelle partie.";
   }
 
   // les fonctions public
@@ -142,9 +147,10 @@ class partie{
     // rempli les infos de la partie depuis un json
     // si $json n'est pas un tableau
     if( !is_array($json) ){$json = json_decode($json, true); };
+    // si l'état est nul, on quitte
+    if( is_null($json["etat"]) ){return False; }else{ $this->_etat = $json["etat"]; };
     $this->_nomJ1 = $json["nomJ1"];
     $this->_nomJ2 = $json["nomJ2"];
-    $this->_etat = $json["etat"];
     $this->_message = $json["message"];
     $this->_grille = $json["grille"];
     return True;
