@@ -27,12 +27,17 @@ if( isset($_REQUEST["supprime"]) ){
 $partieObj = new partie();
 //echo "objet partie (partieObj) :<pre>";var_dump( $partieObj );echo "</pre>";
 
-
+// on lit la partie enregistré
 if( is_file( $fichierPartie ) ){
   $partieObj->setFromJson( file_get_contents( $fichierPartie ) );
   //echo "lecture du fichier $fichierPartie :<pre>";var_dump( $partieObj );echo "</pre>";
 };
 
+// si la partie n'est pas initialisé on supprime le nom du joueur
+if( $partieObj->getEtat() ==11 ){
+  unset( $_SESSION["monNom"] );
+  unset( $_SESSION["monNum"] );
+}
 
 //on attend un joueur
 if( isset($_REQUEST["nom"]) ){
@@ -47,12 +52,18 @@ if( isset($_REQUEST["case"]) ){
   $partieObj->jouer($_REQUEST["case"]);
 };
 
+//On recupère les infos de lapartie
+$json = $partieObj->getJson();
 
-// ecrit les infos dans le fichier de la partie
-$fichier = fopen ( $fichierPartie , "w" );
-fwrite ( $fichier , $partieObj->getJson() );
-fclose( $fichier );
+//echo $partieObj->getEtat();
 
+// si on n'est pas spectateur
+if( $partieObj->getEtat() != 5 ){
+  // ecrit les infos dans le fichier de la partie
+  $fichier = fopen ( $fichierPartie , "w" );
+  fwrite ( $fichier , $json );
+  fclose( $fichier );
+};
 // renvoi le json au joueur
-echo $partieObj->getJson();
+echo $json;
 ?>

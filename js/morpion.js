@@ -33,23 +33,20 @@ function clickJoue( event ) {
 // on dessine le jeu
 function draw($data){
   console.warn("morpion.js : draw");
-  //console.log($data);
+  console.log($data);
 
 	// si je n'ai pas de nom, on arrete
-	if($data.monNom === undefined ){ return false; };
+	//if($data.monNom === undefined ){ return false; };
 
 // on affiche le nom des joueurs
   jQuery("#nomJ1")[0].innerText=$data.nomJ1;
   jQuery("#nomJ2")[0].innerText=$data.nomJ2;
 
-// affiche mon nom et mon symbole
-	jQuery("#monNom")[0].innerText=$data.monNom;
-	jQuery("#monSymbole")[0].src="img/"+$data.monNum+".png";
-
 // suivant l'état de la partie
 switch ($data.etat) {
 	case 1:
 		// au joueur 1 de jouer
+		voirMonNom($data)
 		if($data.monNum == 1){jouer($data);}
 		else{attendre($data);};
 		voirPlateau($data);
@@ -57,8 +54,15 @@ switch ($data.etat) {
 
 	case 2:
 		// au joueur 2 de jouer
+		voirMonNom($data)
 		if($data.monNum == 2){jouer($data);}
 		else{attendre($data);};
+		voirPlateau($data);
+		break;
+
+	case 5:
+		// Mode spectateur
+		attendre($data);
 		voirPlateau($data);
 		break;
 
@@ -74,10 +78,12 @@ switch ($data.etat) {
 	case 11:
 		// manque nom joueur 1
 		attendre($data);
+		jQuery("#plateau >h1").addClass("cacher");
 		break;
 
 	case 12:
 		// manque nom joueur 2
+		jQuery("#plateau >h1").addClass("cacher");
 		viderPlateau();
 		attendre($data);
 		break;
@@ -133,8 +139,15 @@ function viderPlateau(){
 }
 
 function voirFormulaire(){
-		// on désactive le click du plateau
+	// on désactive le click du plateau
 		jQuery("#plateau td").removeClass("cliquable").off( "mouseup" );
 	// on affiche le formulaire
 	  jQuery("#creationJoueur").removeClass("cacher");
+}
+
+function voirMonNom($data){
+	// affiche mon nom et mon symbole
+		jQuery("#monNom")[0].innerText=$data.monNom;
+		jQuery("#monSymbole")[0].src="img/"+$data.monNum+".png";
+		jQuery("#plateau > p").eq(0).removeClass("cacher");
 }
