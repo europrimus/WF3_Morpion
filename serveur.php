@@ -19,6 +19,8 @@ $fichierPartie="partieObj.json";
 if( isset($_REQUEST["supprime"]) ){
   //echo "le joueur ".$_REQUEST["joueur"]." à joué la case ".$_REQUEST["case"]."<br>".PHP_EOL;
   unlink($fichierPartie);
+  unset( $_SESSION["monNom"] );
+  unset( $_SESSION["monNum"] );
 };
 
 // initialise un objet partie

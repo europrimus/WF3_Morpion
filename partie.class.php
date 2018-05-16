@@ -68,8 +68,6 @@ class partie{
   private function _finPartie($gagnant){
     $this->_etat = 10;
     $this->_message = "C'est $gagnant qui à gagné.";
-    unset( $_SESSION["monNom"] );
-    unset( $_SESSION["monNum"] );
   }
 
   // les fonctions public
