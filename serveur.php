@@ -14,6 +14,10 @@ session_start();
 include_once("partie.class.php");
 
 $fichierPartie="partieObj.json";
+$fichierLog="morpion.log";
+
+// log dans le $fichierLog
+file_put_contents( $fichierLog, PHP_EOL."debut : ".date('Y-m-d').PHP_EOL , FILE_APPEND );
 
 // on supprime la partie
 if( isset($_REQUEST["supprime"]) ){
@@ -34,7 +38,7 @@ if( is_file( $fichierPartie ) ){
 };
 
 // si la partie n'est pas initialisé on supprime le nom du joueur
-if( $partieObj->getEtat() ==11 ){
+if( $partieObj->getEtat() == 11 ){
   unset( $_SESSION["monNom"] );
   unset( $_SESSION["monNum"] );
 }
@@ -55,7 +59,8 @@ if( isset($_REQUEST["case"]) ){
 //On recupère les infos de lapartie
 $json = $partieObj->getJson();
 
-//echo $partieObj->getEtat();
+// log dans le $fichierLog
+file_put_contents( $fichierLog, date('H:m:s')." : ".$partieObj->getEtat().PHP_EOL , FILE_APPEND );
 
 // si on n'est pas spectateur
 if( $partieObj->getEtat() != 5 ){

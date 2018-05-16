@@ -46,7 +46,7 @@ function draw($data){
 switch ($data.etat) {
 	case 1:
 		// au joueur 1 de jouer
-		voirMonNom($data)
+		voirMonNom($data);
 		if($data.monNum == 1){jouer($data);}
 		else{attendre($data);};
 		voirPlateau($data);
@@ -54,7 +54,7 @@ switch ($data.etat) {
 
 	case 2:
 		// au joueur 2 de jouer
-		voirMonNom($data)
+		voirMonNom($data);
 		if($data.monNum == 2){jouer($data);}
 		else{attendre($data);};
 		voirPlateau($data);
@@ -69,20 +69,22 @@ switch ($data.etat) {
 	case 10:
 		// partie terminé
 		voirPlateau($data);
-		voirFormulaire();
-		idInterval = setTimeout(function() {
+		//voirFormulaire();
+		jQuery("#message > button").removeClass("cacher").click( function() {
 			jQuery.post( partie, {"supprime":""} , draw, 'json');
-		}, 5000);
+		});
 		break;
 
 	case 11:
 		// manque nom joueur 1
-		attendre($data);
+		jQuery("#message > button").addClass("cacher");
 		jQuery("#plateau >h1").addClass("cacher");
+		attendre($data);
 		break;
 
 	case 12:
 		// manque nom joueur 2
+		jQuery("#message > button").addClass("cacher");
 		jQuery("#plateau >h1").addClass("cacher");
 		viderPlateau();
 		attendre($data);
