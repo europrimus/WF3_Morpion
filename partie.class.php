@@ -15,7 +15,7 @@ class partie{
   private const TAILLE=[3,3]; // la taille du plateau [Ligne,Colone]
 
   // les fonctions privés
-  public function _gagne(){
+  private function _gagne(){
     // on regarde qui a gagner
     // renvois le num du joueur ou False
     //les lignes
@@ -25,19 +25,42 @@ class partie{
       //echo " val:<pre>";var_dump( $val );echo "</pre>";
       if( isset($val[1]) ){
         if($val[1] == $this::TAILLE[0] ){
-          //le joueur 1 à gangé
-          $this->_etat = 10;
-          $this->_message = "C'est $this->_nomJ1 qui à gagné.";
+          // le joueur 1 à gagné
+          $this->_finPartie($this->_nomJ1);
         };
       };
       if( isset($val[2]) ){
         if($val[2] == $this::TAILLE[0] ) {
-        $this->_etat = 10;
-        $this->_message = "C'est $this->_nomJ2 qui à gagné.";
+          // le joueur 2 à gagné
+          $this->_finPartie($this->_nomJ2);
         };
       };
     };
+
+    //les collones
+    for ($i=0; $i < $this::TAILLE[1] ; $i++) {
+      $collone = array_column ( $this->_grille , $i );
+      $val = array_count_values($collone);
+      if( isset($val[1]) ){
+        if($val[1] == $this::TAILLE[1] ){
+          // le joueur 1 à gagné
+          $this->_finPartie($this->_nomJ1);
+        };
+      };
+      if( isset($val[2]) ){
+        if($val[2] == $this::TAILLE[1] ) {
+          // le joueur 2 à gagné
+          $this->_finPartie($this->_nomJ2);
+        };
+      };
+    }
+
   }
+
+private function _finPartie($gagnant){
+  $this->_etat = 10;
+  $this->_message = "C'est $gagnant qui à gagné.";
+}
 
   // les fonctions public
 // fonction appellé à la création de l'objet
@@ -68,7 +91,7 @@ class partie{
     // vérifier si on a un chiffre entre 0 et 3
     // vérifier que l'on ne joue pas 2 foi la même case
     if( isset($this->_grille[ $case[0] ][ $case[1] ]) ){
-      $this->_message = "Case déjà joué. C'est toujours à $joueur de jouer.";
+      $this->_message = "Case déjà joué. C'est toujours à $this->_nomJ$joueur de jouer.";
       return False;
     };
 
@@ -81,7 +104,7 @@ class partie{
       $this->_etat = 1;
       $this->_message = "C'est à $this->_nomJ1 de jouer.";
     };
-    //$this->_gagne();
+    $this->_gagne();
     return True;
   }
 
