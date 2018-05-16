@@ -64,7 +64,8 @@ switch ($data.etat) {
 
 	case 10:
 		// partie terminé
-		cacherPlateau();
+		voirPlateau($data);
+		voirFormulaire();
 		idInterval = setTimeout(function() {
 			jQuery.post( partie, {"supprime":""} , draw, 'json');
 		}, 5000);
@@ -72,13 +73,12 @@ switch ($data.etat) {
 
 	case 11:
 		// manque nom joueur 1
-		cacherPlateau();
 		attendre($data);
 		break;
 
 	case 12:
 		// manque nom joueur 2
-		cacherPlateau();
+		viderPlateau();
 		attendre($data);
 		break;
 
@@ -86,12 +86,12 @@ switch ($data.etat) {
 		// code d'état non reconu
 		$data.message="Erreur: code de retour serveur non reconnu.";
 
-}
+}// switch end
 
 // on affiche le message
   jQuery("#message>p")[0].innerText=$data.message;
 
-}
+}// draw() end
 
 function jouer($data){
 	// c'est à moi de jouer
@@ -125,14 +125,16 @@ function voirPlateau($data){
 	  jQuery("#creationJoueur").addClass("cacher");
 }
 
-function cacherPlateau(){
+function viderPlateau(){
 	// on vide le plateau
 		jQuery("#plateau td").each( function( ) {
   		this.innerHTML='';
 		});
-		// on cache le plateau
-	  jQuery("#plateau").addClass("cacher");
+}
 
+function voirFormulaire(){
+		// on désactive le click du plateau
+		jQuery("#plateau td").removeClass("cliquable").off( "mouseup" );
 	// on affiche le formulaire
 	  jQuery("#creationJoueur").removeClass("cacher");
 }
