@@ -18,49 +18,59 @@ class partie{
   private function _gagne(){
     // on regarde qui a gagner
     // renvois le num du joueur ou False
+
     //les lignes
     foreach ($this->_grille as $key => $ligne) {
-      //echo " ligne:<pre>";var_dump( $ligne );echo "</pre>";
-      $val = array_count_values($ligne);
-      //echo " val:<pre>";var_dump( $val );echo "</pre>";
-      if( isset($val[1]) ){
-        if($val[1] == $this::TAILLE[0] ){
-          // le joueur 1 à gagné
-          $this->_finPartie($this->_nomJ1);
-        };
-      };
-      if( isset($val[2]) ){
-        if($val[2] == $this::TAILLE[0] ) {
-          // le joueur 2 à gagné
-          $this->_finPartie($this->_nomJ2);
-        };
-      };
+      $this->_nbCase($ligne);
     };
 
     //les collones
     for ($i=0; $i < $this::TAILLE[1] ; $i++) {
       $collone = array_column ( $this->_grille , $i );
-      $val = array_count_values($collone);
-      if( isset($val[1]) ){
-        if($val[1] == $this::TAILLE[1] ){
-          // le joueur 1 à gagné
-          $this->_finPartie($this->_nomJ1);
-        };
-      };
-      if( isset($val[2]) ){
-        if($val[2] == $this::TAILLE[1] ) {
-          // le joueur 2 à gagné
-          $this->_finPartie($this->_nomJ2);
-        };
-      };
-    }
+      $this->_nbCase($collone);
+    };
 
+    // les diagonales
+    $hg=array();
+    $bg=array();
+    for ($i=0; $i < $this::TAILLE[0] ; $i++) {
+      if( isset($this->_grille[$i][$i]) ){
+        $hg[]=$this->_grille[$i][$i];
+      } ;
+      if( isset($this->_grille[$this::TAILLE[0]-$i][$i]) ){
+        $bg[]=$this->_grille[$this::TAILLE[0]-$i][$i];
+      };
+    };
+    //echo " hg:<pre>";var_dump( $hg );echo "</pre>";
+    //echo " bg:<pre>";var_dump( $bg );echo "</pre>";
+    $this->_nbCase($hg);
+    $this->_nbCase($bg);
   }
 
-private function _finPartie($gagnant){
-  $this->_etat = 10;
-  $this->_message = "C'est $gagnant qui à gagné.";
-}
+// verifie si x cases
+  private function _nbCase($tableau){
+    $val = array_count_values($tableau);
+    if( isset($val[1]) ){
+      if($val[1] == $this::TAILLE[1] ){
+        // le joueur 1 à gagné
+        $this->_finPartie($this->_nomJ1);
+      };
+    };
+    if( isset($val[2]) ){
+      if($val[2] == $this::TAILLE[1] ) {
+        // le joueur 2 à gagné
+        $this->_finPartie($this->_nomJ2);
+      };
+    };
+  }
+
+// renvois la fin de la partie
+  private function _finPartie($gagnant){
+    $this->_etat = 10;
+    $this->_message = "C'est $gagnant qui à gagné.";
+    unset( $_SESSION["monNom"] );
+    unset( $_SESSION["monNum"] );
+  }
 
   // les fonctions public
 // fonction appellé à la création de l'objet
@@ -91,7 +101,8 @@ private function _finPartie($gagnant){
     // vérifier si on a un chiffre entre 0 et 3
     // vérifier que l'on ne joue pas 2 foi la même case
     if( isset($this->_grille[ $case[0] ][ $case[1] ]) ){
-      $this->_message = "Case déjà joué. C'est toujours à $this->_nomJ$joueur de jouer.";
+      $var="_nomJ";
+      $this->_message = "Case déjà joué. C'est toujours à ".$this->{$var . $joueur}." de jouer.";
       return False;
     };
 
@@ -116,7 +127,16 @@ private function _finPartie($gagnant){
 
   public function getJson(){
     // retourne le json avec touts les infos de la partie
-    $json = ["nomJ1"=>$this->_nomJ1, "nomJ2"=>$this->_nomJ2, "etat"=>$this->_etat, "message"=>$this->_message, "grille"=>(array) $this->_grille];
+    $json = [
+    "nomJ1"=>$this->_nomJ1,
+    "nomJ2"=>$this->_nomJ2,
+    "etat"=>$this->_etat,
+    "message"=>$this->_message,
+    "grille"=>(array) $this->_grille,
+    ];
+    if( isset($_SESSION["monNom"]) ){ $json["monNom"]=$_SESSION["monNom"]; };
+    if( isset($_SESSION["monNum"]) ){ $json["monNum"]=$_SESSION["monNum"]; };
+
     return json_encode($json);
   }
 
@@ -144,8 +164,8 @@ private function _finPartie($gagnant){
       $this->_nomJ1 = $nom;
       $this->_etat = 12;
       $this->_message = "Bienvenu $this->_nomJ1. On attend un autre joueur.";
-      setcookie("monNom",$nom,time()+100);
-      setcookie("monNum",1,time()+100);
+      $_SESSION["monNom"]=$nom;
+      $_SESSION["monNum"]=1;
     }
 
     elseif($this->_etat == 12){
@@ -153,8 +173,8 @@ private function _finPartie($gagnant){
       $this->_nomJ2 = $nom;
       $this->_etat = 1;
       $this->_message = "Bienvenu à $this->_nomJ2. C'est à $this->_nomJ1 de jouer.";
-      setcookie("monNom",$nom,time()+100);
-      setcookie("monNum",2,time()+100);
+      $_SESSION["monNom"]=$nom;
+      $_SESSION["monNum"]=2;
     };
   }
 }

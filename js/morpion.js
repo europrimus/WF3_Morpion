@@ -1,5 +1,5 @@
 // nom de la partie:
-let partie = "partieObj.json"
+let partie = "serveur.php"
 let idInterval;
 // on charge la partie
 jQuery.post( partie, draw, 'json');
@@ -11,9 +11,8 @@ jQuery("#submitNom").click( function( event ) {
 	event.preventDefault();
 // on récupère le nom
 	nom = jQuery("#nom").val();
-	localStorage.setItem('monNom', nom );
 // et on l'envoi au serveur
-	jQuery.post("serveur.php", { "nom": nom }, draw, 'json');
+	jQuery.post(partie, { "nom": nom }, draw, 'json');
 });
 
 // on click sur une case
@@ -24,7 +23,7 @@ function clickJoue( event ) {
 	let colone = jQuery(this).parent( "tr" )[0].rowIndex;
 	let box = String(colone)+String(ligne);
 	console.log(box);
-	jQuery.post("serveur.php", { "case": box }, draw, 'json');
+	jQuery.post(partie, { "case": box }, draw, 'json');
 	idInterval = setTimeout(function() {
 		jQuery.post( partie, draw, 'json');
 	}, 500);
@@ -36,31 +35,35 @@ function draw($data){
   console.warn("morpion.js : draw");
   //console.log($data);
   //console.log($data.nomJ2);
-	// est ce que j'appartien à la partie ?
-if( ( $data.nomJ1 !== localStorage.monNom ) && ( $data.nomJ2 !== localStorage.monNom ) ){
-	localStorage.removeItem("monNom");
-}
 
 // on affiche le nom des joueurs
   jQuery("#nomJ1")[0].innerText=$data.nomJ1;
   jQuery("#nomJ2")[0].innerText=$data.nomJ2;
 
 // si je n'ai pas de nom, on arrete
-if(localStorage['monNom'] === undefined ){ return false; };
+if($data.monNom === undefined ){ return false; };
 
 // c'est à moi de jouer ?
 //console.log($data.nomJ1);
-//console.log(localStorage.monNom);
-let jeSuis;
-if( $data.nomJ1 == localStorage.monNom ){jeSuis = 1}
-else if( $data.nomJ2 == localStorage.monNom ){jeSuis = 2}
-if($data.etat != jeSuis ){
+//console.log($data.monNom);
+let jeSuis=$data.monNum;
+// affiche mon nom et mon symbole
+jQuery("#monNom")[0].innerText=$data.monNom;
+jQuery("#monSymbole")[0].src="img/"+$data.monNum+".png";
+
+// si ce n'est pas à moi de jouer
+// ou si la partie est fini
+if($data.etat != jeSuis){
 	//console.log("ce n'est pas à moi de jouer");
 	jQuery("#plateau td").removeClass("cliquable").off( "mouseup" );
-	// on recupère la partie en cour
-	idInterval = setTimeout(function() {
-		jQuery.post( partie, draw, 'json');
-	}, 500);
+if( $data.etat == 10 ){
+	jQuery.post( partie, {"supprime":""} , draw, 'json')
+	}else{
+		// on recupère la partie en cour
+		idInterval = setTimeout(function() {
+			jQuery.post( partie, draw, 'json');
+		}, 500);
+	};
 }else{
 	//console.log("c'est à moi de jouer");
 	// on arrete de récupérer les infos de partie

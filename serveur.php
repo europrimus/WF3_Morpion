@@ -15,6 +15,12 @@ include_once("partie.class.php");
 
 $fichierPartie="partieObj.json";
 
+// on supprime la partie
+if( isset($_REQUEST["supprime"]) ){
+  //echo "le joueur ".$_REQUEST["joueur"]." à joué la case ".$_REQUEST["case"]."<br>".PHP_EOL;
+  unlink($fichierPartie);
+};
+
 // initialise un objet partie
 $partieObj = new partie();
 //echo "objet partie (partieObj) :<pre>";var_dump( $partieObj );echo "</pre>";
@@ -32,22 +38,13 @@ if( isset($_REQUEST["nom"]) ){
   //echo "Ajoute un joueur (partieObj) :<pre>";var_dump( $partieObj );echo "</pre>";
 }
 
-// attend action J1
+// attend action du joueur
 // coordonnés de la case joué
 if( isset($_REQUEST["case"]) ){
   //echo "le joueur ".$_REQUEST["joueur"]." à joué la case ".$_REQUEST["case"]."<br>".PHP_EOL;
   $partieObj->jouer($_REQUEST["case"]);
 };
 
-// renvois info à J2
-// toute la grille
-
-
-// attend action J2
-// coordonnés de la case
-
-// renvois info à J1
-// toute la grille
 
 // ecrit les infos dans le fichier de la partie
 $fichier = fopen ( $fichierPartie , "w" );
