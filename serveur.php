@@ -17,7 +17,11 @@ $fichierPartie="partieObj.json";
 $fichierLog="morpion.log";
 
 // log dans le $fichierLog
-file_put_contents( $fichierLog, PHP_EOL."debut : ".date('Y-m-d').PHP_EOL , FILE_APPEND );
+//file_put_contents( $fichierLog, PHP_EOL."debut : ".date('Y-m-d').PHP_EOL , FILE_APPEND );
+
+function log2file($tolog,$fichierLog){
+  file_put_contents( $fichierLog, date('Y/m/d H:i:s')." : ".$tolog.PHP_EOL , FILE_APPEND );
+}
 
 // on supprime la partie
 if( isset($_REQUEST["supprime"]) ){
@@ -60,7 +64,7 @@ if( isset($_REQUEST["case"]) ){
 $json = $partieObj->getJson();
 
 // log dans le $fichierLog
-file_put_contents( $fichierLog, date('H:m:s')." : ".$partieObj->getEtat().PHP_EOL , FILE_APPEND );
+log2file("json : ".$json.PHP_EOL."partieObj->getEtat : ".$partieObj->getEtat().PHP_EOL."_SESSION[monNom] : ".$_SESSION["monNom"] , $fichierLog );
 
 // si on n'est pas spectateur
 if( $partieObj->getEtat() != 5 ){
